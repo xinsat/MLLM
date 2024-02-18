@@ -17,7 +17,7 @@ def sendmessage(message):
     olmo_pipe = pipeline("text-generation", model="allenai/OLMo-1B")
     response =olmo_pipe(message)
     return response
-message = ["The world is crazy. "]
+message = "The world is crazy. "
 print(sendmessage(message))
 
 def talkto(message):
