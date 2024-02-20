@@ -9,16 +9,18 @@ llm = Llama(
   n_gpu_layers=35         # The number of layers to offload to GPU, if you have GPU acceleration available
 )
 
-'''
-# Simple inference example
-output = llm(
-  "<|user|>\n {hi} <|endoftext|>\n<|assistant|>", # Prompt
-  max_tokens=512,  # Generate up to 512 tokens
-  stop=["</s>"],   # Example stop token - not necessarily correct for this specific model! Please check before using.
-  echo=True        # Whether to echo the prompt
-)
-print(output)
-'''
+def talkto2(messages):
+    # Simple inference example
+    response = llm(
+    "<|user|>\n {messages} <|endoftext|>\n", # Prompt
+    max_tokens=512,  # Generate up to 512 tokens
+    stop=["</s>"],   # Example stop token - not necessarily correct for this specific model! Please check before using.
+    echo=True        # Whether to echo the prompt
+    )
+    output = response['choices'][0]['message']['content']
+    return gr.Textbox(value=output)
+
+
 
 # Chat Completion API
 llm = Llama(model_path="F:\StableCascade\stablelm-zephyr-3b.Q4_K_M.gguf", chat_format="llama-2")  # Set chat_format according to the model you are using
@@ -29,7 +31,7 @@ def talkto(messages):
         #{"role": "system", "content": "You are a professor"},
         {
             "role": "user",
-            "content": message
+            "content": messages
         }
     ]
     )
@@ -38,9 +40,9 @@ def talkto(messages):
 
 with gr.Blocks() as demo:
     with gr.Row():
-        message=gr.Textbox(lines=15, label="Me")
+        messages=gr.Textbox(lines=15, label="Me")
         output=gr.Textbox(label="Gen",lines=15)
     submit=gr.Button("Send")
-    submit.click(talkto,inputs=message, outputs=output)
+    submit.click(talkto,inputs=messages, outputs=output)
 
 demo.launch()
