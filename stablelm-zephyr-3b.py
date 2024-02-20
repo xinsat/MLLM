@@ -25,7 +25,7 @@ def test():
     print(tokenizer.decode(tokens[0], skip_special_tokens=False))
 
 def talkto(messages):
-    prompt = [{'role': 'Ri', 'content': messages}]
+    prompt = [{'role': 'user', 'content': messages}]
     inputs = tokenizer.apply_chat_template(
         prompt,
         add_generation_prompt=True,
